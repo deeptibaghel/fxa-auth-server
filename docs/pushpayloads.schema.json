@@ -10,7 +10,8 @@
     { "$ref":"#/definitions/collectionsChanged" },
     { "$ref":"#/definitions/passwordChanged" },
     { "$ref":"#/definitions/passwordReset" },
-    { "$ref":"#/definitions/accountDestroyed" }
+    { "$ref":"#/definitions/accountDestroyed" },
+    { "$ref":"#/definitions/pushboxUpdated" }
   ],
   "definitions":{
     "deviceConnected":{
@@ -204,6 +205,23 @@
             }
           },
           "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "pushboxUpdated":{
+      "required":[
+        "service"
+      ],
+      "properties":{
+        "service": {
+          "type":"string",
+          "enum":[
+            "sendtab"
+          ]
+        },
+        "index": {
+          "type":"string"
         }
       },
       "additionalProperties": false

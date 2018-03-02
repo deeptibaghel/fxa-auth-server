@@ -123,7 +123,12 @@ const PUSH_METHOD_NAMES = [
   'notifyAccountUpdated',
   'notifyAccountDestroyed',
   'notifyProfileUpdated',
+  'notifyPushboxUpdated',
   'sendPush'
+]
+
+const PUSHBOX_METHOD_NAMES = [
+  'sendTab'
 ]
 
 module.exports = {
@@ -137,6 +142,7 @@ module.exports = {
   mockMailer: mockObject(MAILER_METHOD_NAMES),
   mockMetricsContext,
   mockPush,
+  mockPushbox,
   mockRequest
 }
 
@@ -382,6 +388,17 @@ function mockPush (methods) {
     }
   })
   return push
+}
+
+function mockPushbox (methods) {
+  const pushbox = extend({}, methods)
+  // So far every pushbox method has a uid for first argument, let's keep it simple.
+  PUSHBOX_METHOD_NAMES.forEach((name) => {
+    if (! pushbox[name]) {
+      pushbox[name] = sinon.spy(() => P.resolve())
+    }
+  })
+  return pushbox
 }
 
 function mockDevices (data) {
