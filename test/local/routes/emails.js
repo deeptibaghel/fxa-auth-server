@@ -500,9 +500,9 @@ describe('/recovery_email/verify_code', function () {
         assert.equal(mockLog.flowEvent.args[0][0].event, 'email.verify_code.clicked', 'first event was email.verify_code.clicked')
         assert.equal(mockLog.flowEvent.args[1][0].event, 'account.verified', 'second event was event account.verified')
 
-        assert.equal(mockPush.notifyUpdate.callCount, 1, 'mockPush.notifyUpdate should have been called once')
-        args = mockPush.notifyUpdate.args[0]
-        assert.equal(args.length, 3, 'mockPush.notifyUpdate should have been passed three arguments')
+        assert.equal(mockPush.notifyAccountUpdated.callCount, 1, 'mockPush.notifyAccountUpdated should have been called once')
+        args = mockPush.notifyAccountUpdated.args[0]
+        assert.equal(args.length, 3, 'mockPush.notifyAccountUpdated should have been passed three arguments')
         assert.equal(args[0].toString('hex'), uid, 'first argument should have been uid')
         assert.ok(Array.isArray(args[1]), 'second argument should have been devices array')
         assert.equal(args[2], 'accountVerify', 'third argument should have been reason')
@@ -516,7 +516,7 @@ describe('/recovery_email/verify_code', function () {
           mockLog.flowEvent.reset()
           mockLog.notifyAttachedServices.reset()
           mockMailer.sendPostVerifyEmail.reset()
-          mockPush.notifyUpdate.reset()
+          mockPush.notifyAccountUpdated.reset()
         })
     })
 
@@ -544,7 +544,7 @@ describe('/recovery_email/verify_code', function () {
           mockLog.flowEvent.reset()
           mockLog.notifyAttachedServices.reset()
           mockMailer.sendPostVerifyEmail.reset()
-          mockPush.notifyUpdate.reset()
+          mockPush.notifyAccountUpdated.reset()
         })
     })
 
@@ -559,7 +559,7 @@ describe('/recovery_email/verify_code', function () {
         assert.equal(mockLog.flowEvent.args[1][0].event, 'account.verified', 'second event was account.verified')
 
         assert.equal(mockMailer.sendPostVerifyEmail.callCount, 1, 'sendPostVerifyEmail was called once')
-        assert.equal(mockPush.notifyUpdate.callCount, 1, 'mockPush.notifyUpdate should have been called once')
+        assert.equal(mockPush.notifyAccountUpdated.callCount, 1, 'mockPush.notifyAccountUpdated should have been called once')
 
         assert.equal(JSON.stringify(response), '{}')
       })
@@ -570,7 +570,7 @@ describe('/recovery_email/verify_code', function () {
           mockLog.flowEvent.reset()
           mockLog.notifyAttachedServices.reset()
           mockMailer.sendPostVerifyEmail.reset()
-          mockPush.notifyUpdate.reset()
+          mockPush.notifyAccountUpdated.reset()
         })
     })
   })
@@ -588,7 +588,7 @@ describe('/recovery_email/verify_code', function () {
         assert.equal(mockDB.verifyEmail.callCount, 0, 'does not call db.verifyEmail')
         assert.equal(mockLog.notifyAttachedServices.callCount, 0, 'does not call log.notifyAttachedServices')
         assert.equal(mockLog.activityEvent.callCount, 0, 'log.activityEvent was not called')
-        assert.equal(mockPush.notifyUpdate.callCount, 0, 'mockPush.notifyUpdate should not have been called')
+        assert.equal(mockPush.notifyAccountUpdated.callCount, 0, 'mockPush.notifyAccountUpdated should not have been called')
         assert.equal(mockPush.notifyDeviceConnected.callCount, 0, 'mockPush.notifyDeviceConnected should not have been called (no devices)')
       })
         .then(function () {
@@ -609,7 +609,7 @@ describe('/recovery_email/verify_code', function () {
         assert.equal(mockDB.verifyEmail.callCount, 0, 'does not call db.verifyEmail')
         assert.equal(mockLog.notifyAttachedServices.callCount, 0, 'does not call log.notifyAttachedServices')
         assert.equal(mockLog.activityEvent.callCount, 0, 'log.activityEvent was not called')
-        assert.equal(mockPush.notifyUpdate.callCount, 0, 'mockPush.notifyUpdate should not have been called')
+        assert.equal(mockPush.notifyAccountUpdated.callCount, 0, 'mockPush.notifyAccountUpdated should not have been called')
         assert.equal(mockPush.notifyDeviceConnected.callCount, 1, 'mockPush.notifyDeviceConnected should have been called')
       })
         .then(function () {
@@ -635,9 +635,9 @@ describe('/recovery_email/verify_code', function () {
           uid: uid.toString('hex')
         }, 'event data was correct')
 
-        assert.equal(mockPush.notifyUpdate.callCount, 1, 'mockPush.notifyUpdate should have been called once')
-        args = mockPush.notifyUpdate.args[0]
-        assert.equal(args.length, 3, 'mockPush.notifyUpdate should have been passed three arguments')
+        assert.equal(mockPush.notifyAccountUpdated.callCount, 1, 'mockPush.notifyAccountUpdated should have been called once')
+        args = mockPush.notifyAccountUpdated.args[0]
+        assert.equal(args.length, 3, 'mockPush.notifyAccountUpdated should have been passed three arguments')
         assert.equal(args[0].toString('hex'), uid, 'first argument should have been uid')
         assert.ok(Array.isArray(args[1]), 'second argument should have been devices array')
         assert.equal(args[2], 'accountConfirm', 'third argument should have been reason')
@@ -645,7 +645,7 @@ describe('/recovery_email/verify_code', function () {
         .then(function () {
           mockDB.verifyTokens.reset()
           mockLog.activityEvent.reset()
-          mockPush.notifyUpdate.reset()
+          mockPush.notifyAccountUpdated.reset()
         })
     })
 
@@ -674,7 +674,7 @@ describe('/recovery_email/verify_code', function () {
           mockDB.verifyEmail.reset()
           mockLog.activityEvent.reset()
           mockMailer.sendPostVerifySecondaryEmail.reset()
-          mockPush.notifyUpdate.reset()
+          mockPush.notifyAccountUpdated.reset()
         })
     })
   })

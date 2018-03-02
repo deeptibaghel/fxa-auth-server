@@ -120,9 +120,10 @@ const PUSH_METHOD_NAMES = [
   'notifyDeviceDisconnected',
   'notifyPasswordChanged',
   'notifyPasswordReset',
+  'notifyAccountUpdated',
   'notifyAccountDestroyed',
   'notifyProfileUpdated',
-  'notifyUpdate'
+  'sendPush'
 ]
 
 module.exports = {
