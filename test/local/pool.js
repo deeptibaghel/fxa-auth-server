@@ -51,7 +51,7 @@ describe('Pool', () => {
     'pool.request with alternative options',
     () => {
       var pool = new Pool('http://example.com/')
-      pool.request('POST', '/foo', { bar: 'baz' })
+      pool.request('POST', '/foo', { Authorization: 'Bearer 123abc' }, { bar: 'baz' })
 
       assert.equal(poolee.request.callCount, 1, 'poolee.request was called once')
 
@@ -64,8 +64,9 @@ describe('Pool', () => {
       assert.equal(options.method, 'POST', 'options.method is POST')
       assert.equal(options.path, '/foo', 'options.path is /foo')
       assert.equal(typeof options.headers, 'object', 'options.headers is object')
-      assert.equal(Object.keys(options.headers).length, 1, 'options.headers has 1 property')
+      assert.equal(Object.keys(options.headers).length, 2, 'options.headers has 2 properties')
       assert.equal(options.headers['Content-Type'], 'application/json', 'Content-Type header is application/json')
+      assert.equal(options.headers['Authorization'], 'Bearer 123abc', 'Authorization header is set')
       assert.equal(options.data, '{"bar":"baz"}', 'options.data is correct')
 
       var callback = args[1]
@@ -197,9 +198,10 @@ describe('Pool', () => {
       assert.equal(pool.request.callCount, 1, 'pool.request was called once')
 
       var args = pool.request.getCall(0).args
-      assert.equal(args.length, 2, 'pool.request was passed three arguments')
+      assert.equal(args.length, 3, 'pool.request was passed three arguments')
       assert.equal(args[0], 'GET', 'first argument to pool.request was POST')
       assert.equal(args[1], 'foo', 'second argument to pool.request was correct')
+      assert.equal(args[2], null, 'third argument to pool.request was null')
     }
   )
 
@@ -213,10 +215,11 @@ describe('Pool', () => {
       assert.equal(pool.request.callCount, 1, 'pool.request was called once')
 
       var args = pool.request.getCall(0).args
-      assert.equal(args.length, 3, 'pool.request was passed three arguments')
+      assert.equal(args.length, 4, 'pool.request was passed four arguments')
       assert.equal(args[0], 'PUT', 'first argument to pool.request was POST')
       assert.equal(args[1], 'baz', 'second argument to pool.request was correct')
-      assert.equal(args[2], 'qux', 'third argument to pool.request was correct')
+      assert.equal(args[2], null, 'third argument to pool.request was null')
+      assert.equal(args[3], 'qux', 'fourth argument to pool.request was correct')
     }
   )
 
@@ -230,10 +233,29 @@ describe('Pool', () => {
       assert.equal(pool.request.callCount, 1, 'pool.request was called once')
 
       var args = pool.request.getCall(0).args
-      assert.equal(args.length, 3, 'pool.request was passed three arguments')
+      assert.equal(args.length, 4, 'pool.request was passed four arguments')
       assert.equal(args[0], 'POST', 'first argument to pool.request was POST')
       assert.equal(args[1], 'foo', 'second argument to pool.request was correct')
-      assert.equal(args[2], 'bar', 'third argument to pool.request was correct')
+      assert.equal(args[2], null, 'third argument to pool.request was null')
+      assert.equal(args[3], 'bar', 'fourth argument to pool.request was correct')
+    }
+  )
+
+  it(
+    'pool.post with extra headers',
+    () => {
+      var pool = new Pool('http://example.com/')
+      sinon.stub(pool, 'request', function () {})
+      pool.post('foo', 'bar', { foo: 'bar' })
+
+      assert.equal(pool.request.callCount, 1, 'pool.request was called once')
+
+      var args = pool.request.getCall(0).args
+      assert.equal(args.length, 4, 'pool.request was passed four arguments')
+      assert.equal(args[0], 'POST', 'first argument to pool.request was POST')
+      assert.equal(args[1], 'foo', 'second argument to pool.request was correct')
+      assert.deepEqual(args[2], {foo: 'bar'}, 'third argument to pool.request was set')
+      assert.equal(args[3], 'bar', 'fourth argument to pool.request was correct')
     }
   )
 
@@ -247,10 +269,11 @@ describe('Pool', () => {
       assert.equal(pool.request.callCount, 1, 'pool.request was called once')
 
       var args = pool.request.getCall(0).args
-      assert.equal(args.length, 3, 'pool.request was passed three arguments')
+      assert.equal(args.length, 4, 'pool.request was passed four arguments')
       assert.equal(args[0], 'DELETE', 'first argument to pool.request was POST')
       assert.equal(args[1], 'foo', 'second argument to pool.request was correct')
-      assert.equal(args[2], 'bar', 'second argument can be data')
+      assert.equal(args[2], null, 'third argument to pool.request was null')
+      assert.equal(args[3], 'bar', 'fourth argument can be data')
     }
   )
 
